@@ -21,7 +21,10 @@ import (
 	"context"
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/AlexSSD7/linsk/utils"
@@ -34,6 +37,12 @@ func GenerateSSHKey() (ssh.Signer, []byte, error) {
 	if err != nil {
 		return nil, nil, errors.Wrap(err, "generate rsa private key")
 	}
+	privBytes, err := x509.MarshalPKCS8PrivateKey(privateKey)
+	keyOut, err := os.OpenFile("tmp_rsa", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	// pem.Encode(os.Stdout, &pem.Block{Type: "PRIVATE KEY", Bytes: privBytes})
+	pem.Encode(keyOut, &pem.Block{Type: "PRIVATE KEY", Bytes: privBytes})
+	keyOut.Close()
+	// slog.Error("privateKey", privateKey)
 
 	signer, err := ssh.NewSignerFromKey(privateKey)
 	if err != nil {

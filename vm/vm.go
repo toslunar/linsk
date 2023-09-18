@@ -106,6 +106,7 @@ type Config struct {
 
 func NewVM(logger *slog.Logger, cfg Config) (*VM, error) {
 	sshPort, err := freeport.GetFreePort()
+	fmt.Println(sshPort)
 	if err != nil {
 		return nil, errors.Wrap(err, "get free port for ssh server")
 	}

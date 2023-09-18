@@ -62,6 +62,8 @@ var shellCmd = &cobra.Command{
 				slog.Info("Tap host-VM networking is active", "host-ip", trc.Net.HostIP, "vm-ip", trc.Net.GuestIP)
 			}
 
+			fm.Init()
+
 			err := runVMShell(ctx, i)
 			if err != nil {
 				slog.Error("Failed to run VM shell", "error", err.Error())
